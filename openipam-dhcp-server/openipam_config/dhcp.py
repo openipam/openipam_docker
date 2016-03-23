@@ -13,3 +13,5 @@ server_listen = [{'address': listen_address, 'interface': listen_interface, 'bro
 
 # DHCP options that should always be returned if they are defined
 force_options = [66, 67]
+
+sentry_url = os.environ.get('sentry_url')
