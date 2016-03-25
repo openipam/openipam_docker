@@ -9,9 +9,9 @@ Create a bridge with the outside interface as a member in `/etc/network/interfac
 ```bash
 auto br123
 iface br123 inet static
-        address 10.0.0.1
+        address 192.0.2.1
         netmask 255.255.255.0
-        gateway 10.0.0.254
+        gateway 192.0.2.254
         bridge-ports eth0
         bridge-fd 0
         bridge-maxwait 0
@@ -22,8 +22,9 @@ iface br123 inet static
 Create the bridge in docker:
 
 ```bash
-# FIXME: this appears to delete the existing bridge :/
-docker network create -o com.docker.network.bridge.name="br123" --subnet=10.0.0.0/24 --gateway=10.0.0.254 my_docker_bridge
+# FIXME: this appears to delete the existing bridge on a `docker network rm`
+# Note: --gateway specifies the bridge IP that docker will set, not necessarily the default gateway
+docker network create -o com.docker.network.bridge.name=br123 --aux-address "DefaultGatewayIPv4=192.0.2.1" --subnet 192.0.2.0/25 --gateway 192.0.2.32 docker_ipamnet
 ```
 
 Build the docker image:
@@ -40,7 +41,7 @@ esk@bits:~/src/openipam_docker$
 and run it:
 
 ```bash
-docker run --env-file=openipam_dhcp_options.env --net=my_docker_bridge --ip=10.0.0.2 --name openipam_dhcp_server
+docker run --env-file=openipam_dhcp_options.env --net=my_docker_bridge --ip=192.0.2.2 --name openipam_dhcp_server d7315bc5c1a0
 ```
 
 
