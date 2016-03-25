@@ -7,7 +7,9 @@ ENV DEBIAN_FRONTEND noninteractive
 #RUN /bin/echo -e "\n# backports for pdns-server\ndeb http://http.debian.net/debian jessie-backports main\n" >> /etc/apt/sources.list
 
 RUN apt-get -y update && \
-    apt-get install -q -y python-sqlalchemy python-ldap python-psycopg2 python-ipy git
+    apt-get install -q -y python-sqlalchemy python-ldap python-psycopg2 python-ipy git python-setuptools
+
+RUN easy_install raven
 
 COPY ./start_dhcp.sh /usr/local/bin/start_dhcp.sh
 
