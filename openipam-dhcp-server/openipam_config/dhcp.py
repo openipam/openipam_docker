@@ -12,6 +12,6 @@ listen_interface = os.environ.get('listen_interface', 'eth0')
 server_listen = [{'address': listen_address, 'interface': listen_interface, 'broadcast': True, 'unicast': True, }]
 
 # DHCP options that should always be returned if they are defined
-force_options = [66, 67]
+force_options = [60, 66, 67]
 
 sentry_url = os.environ.get('sentry_url')
