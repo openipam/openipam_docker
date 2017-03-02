@@ -21,7 +21,8 @@ RUN install -d -m 2775 -o openipam -g openipam /usr/local/openipam
 
 USER openipam
 
-RUN git clone https://github.com/openipam/openipam.git /usr/local/openipam
+#RUN git clone https://github.com/openipam/openipam.git /usr/local/openipam
+RUN git clone https://github.com/ekoyle/openipam.git /usr/local/openipam
 
 COPY ./openipam_config /usr/local/openipam/openIPAM/openipam_config
 
