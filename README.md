@@ -63,10 +63,18 @@ sentry_url=https://my.sentry.host/...
 
 ```
 
-# run the server
+# run the servers
 
-```
+## DHCP
+
+```sh
 docker run --env-file ~/dhcp_server.env --net ipamnet --ip <container_ip> -v /dev/log:/dev/log --name dhcptest --restart=unless-stopped -d <local_registry>/openipam/dhcp:latest
 ```
 
+## PowerDNS authoritative
+
+```sh
+# FIXME: I don't think this is configured to log to syslog currently
+docker run --env-file openipam-root-test.env --net ipamnet --ip 129.123.0.7 -v /run/postgresql/:/var/run/postgresql/ -v /dev/log:/dev/log --name openipam-nsroot-test_0.7 -d openipam-powerdns-authoritative
+```
 

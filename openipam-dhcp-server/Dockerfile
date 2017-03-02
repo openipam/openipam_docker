@@ -25,6 +25,8 @@ RUN git clone https://github.com/openipam/openipam.git /usr/local/openipam
 
 COPY ./openipam_config /usr/local/openipam/openIPAM/openipam_config
 
+RUN install -d -m 1777 -o root -g root /tmp
+
 USER root
 
 EXPOSE 67/udp

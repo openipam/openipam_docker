@@ -4,10 +4,14 @@ MAINTAINER Eldon Koyle <ekoyle@gmail.com>
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN /bin/echo -e "\n# backports for pdns-server\ndeb http://http.debian.net/debian jessie-backports main\n" >> /etc/apt/sources.list
-
-RUN apt-get -y update && \
-    apt-get install -t jessie-backports -q -y pdns-server pdns-backend-pgsql
+RUN apt-get -y update \
+	&& apt-get install -y --no-install-recommends curl ca-certificates \
+	&& curl https://repo.powerdns.com/FD380FBB-pub.asc | apt-key add - \
+	&& /bin/echo -e "\n# powerdns official packages\ndeb http://repo.powerdns.com/debian jessie-auth-40 main\n" >> /etc/apt/sources.list \
+	&& apt-get -y update \
+	&& apt-get install -q -y pdns-server pdns-backend-pgsql \
+	&& apt-get clean \
+	&& rm -rf /var/lib/apt/lists
 
 ADD ./start_pdns.sh /usr/local/bin/start_pdns.sh
 RUN chmod u+x       /usr/local/bin/start_pdns.sh
