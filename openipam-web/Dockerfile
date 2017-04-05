@@ -54,5 +54,13 @@ RUN chmod a+rx /usr/local/bin/start_uwsgi.sh
 
 USER openipam
 
-CMD exec /usr/local/bin/start_uwsgi.sh
+# FIXME: why is this directory referenced in STATICFILES_DIRS (openipam/conf/settings.py) if it doesn't exist?
+RUN [ -d /usr/local/django-openipam/components/static_components ] || mkdir -p /usr/local/django-openipam/components/static_components
+
+RUN cd /usr/local/django-openipam && ./manage.py collectstatic --no-input
+
+USER root
+
+# run as root and let uwsgi drop privs
+CMD /usr/local/bin/start_uwsgi.sh
 
