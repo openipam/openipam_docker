@@ -1,6 +1,8 @@
 #!/bin/bash
 
-cat << EOF | tee /usr/local/django-openipam/openipam/conf/local_settings.py
+conf_file='/usr/local/django-openipam/openipam/conf/local_settings.py'
+
+cat << EOF > $conf_file
 try:
     import psycopg2
 except:
@@ -37,9 +39,9 @@ ALLOWED_HOSTS = ['*']
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',  # we are using some postgresql specific features
-        'NAME': '$DB_NAME',                      # Or path to database file if using sqlite3.
-        'USER': '$DB_USER',                      # Not used with sqlite3.
-        'PASSWORD': '$DB_PASS',                  # Not used with sqlite3.
+        'NAME': '$DB_DATABASE',                  # Or path to database file if using sqlite3.
+        'USER': '$DB_USERNAME',                  # Not used with sqlite3.
+        'PASSWORD': '$DB_PASSWORD',              # Not used with sqlite3.
         'HOST': '$DB_HOST',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '$DB_PORT',                      # Set to empty string for default. Not used with sqlite3.
         'ATOMIC_REQUESTS': True,
@@ -79,7 +81,17 @@ fi
 
 EOF
 
-unset DB_NAME DB_USER DB_PASS DB_HOST DB_PORT LOCAL_SECRET_KEY RAVEN_DSN DEBUG
+if [ "$STARTUP_DEBUG" == "True" ]; then
+    echo "# $conf_file"
+    cat $conf_file
+    echo "# env"
+    env
+fi
 
-exec /usr/bin/uwsgi_python27 --ini /etc/uwsgi/uwsgi.ini --master --enable-threads -s /var/run/uwsgi/openipam.sock
+uwsgi_add_args=$UWSGI_ADD_ARGS
+
+unset DB_NAME DB_USER DB_PASS DB_HOST DB_PORT LOCAL_SECRET_KEY RAVEN_DSN DEBUG UWSGI_ADD_ARGS STARTUP_DEBUG
+
+exec /usr/bin/uwsgi_python27 --ini=/etc/uwsgi/uwsgi.ini --master --enable-threads \
+    --uid=openipam --gid=openipam  $uwsgi_add_args
 
