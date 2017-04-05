@@ -1,16 +1,17 @@
-#!/bin/sh
+#!/bin/bash
 
-echo "# generated on `date`, do not edit" > /etc/powerdns/pdns.conf
 
-if "$PDNS_CARBON_SERVER"; then
-cat << EOF >> /etc/powerdns/pdns.conf
+cat << EOF > /etc/powerdns/pdns.conf
+# generated on $(date) by start_pdns.sh, do not edit
+
+$(if "$PDNS_CARBON_SERVER"; then
+cat << EOFCARBON
 carbon-interval=60
 carbon-ourname=ipam.dns.docker.${PDNS_SERVER_LABEL:-UNSET}
 carbon-server=$PDNS_CARBON_SERVER
-EOF
-fi
+EOFCARBON
+fi)
 
-cat << EOF >> /etc/powerdns/pdns.conf
 distributor-threads=4
 launch=gpgsql
 local-address=${PDNS_LOCAL_ADDRESS:-0.0.0.0}
@@ -27,6 +28,8 @@ gpgsql-user=${PDNS_PGSQL_USER:-pdns}
 gpgsql-password=${PDNS_PGSQL_PASSWORD:-}
 
 EOF
+
+unset PDNS_PGSQL_DB PDNS_PGSQL_HOST PDNS_PGSQL_USER PDNS_PGSQL_PASSWORD PDNS_CARBON_SERVER PDNS_SERVER_LABEL
 
 exec /usr/sbin/pdns_server
 
