@@ -90,7 +90,7 @@ fi
 
 uwsgi_add_args=$UWSGI_ADD_ARGS
 
-unset DB_NAME DB_USER DB_PASS DB_HOST DB_PORT LOCAL_SECRET_KEY RAVEN_DSN DEBUG UWSGI_ADD_ARGS STARTUP_DEBUG
+unset DB_DATABASE DB_USERNAME DB_PASSWORD DB_HOST DB_PORT LOCAL_SECRET_KEY RAVEN_DSN UWSGI_ADD_ARGS
 
 exec /usr/bin/uwsgi_python27 --ini=/etc/uwsgi/uwsgi.ini --master --enable-threads \
     --uid=openipam --gid=openipam  $uwsgi_add_args
