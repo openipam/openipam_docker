@@ -109,8 +109,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 INTERNAL_IPS = ('127.0.0.1',)
 
-# SESSION_COOKIE_SECURE = True
-# SESSION_EXPIRE_BROWSER_CLOSE = True
+SESSION_COOKIE_SECURE = True
+SESSION_EXPIRE_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = ${SESSION_COOKIE_AGE:-28800}
 
 LOCAL_SECRET_KEY = '$LOCAL_SECRET_KEY'
 
@@ -165,6 +166,12 @@ __WEATHERMAP_EOF__
 fi
 )
 }
+
+$(
+if [ -n "$LOCAL_SETTINGS_APPEND" ] ; then
+    echo "$LOCAL_SETTINGS_APPEND" | base64 -d | gunzip
+fi
+)
 
 EOF
 
