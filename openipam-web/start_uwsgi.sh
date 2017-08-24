@@ -216,5 +216,4 @@ unset STARTUP_DEBUG
 unset UWSGI_ADD_ARGS
 unset WEATHERMAP_DATA_JSON
 
-exec /usr/bin/uwsgi_python27 --ini=/etc/uwsgi/uwsgi.ini --master --enable-threads \
-    --uid=openipam --gid=openipam  $uwsgi_add_args
+exec /usr/bin/uwsgi_python27 --ini=/etc/uwsgi/uwsgi.ini --master $uwsgi_add_args

@@ -2,6 +2,8 @@ FROM debian:jessie
 
 MAINTAINER Eldon Koyle <ekoyle@gmail.com>
 
+ARG git_branch=master
+
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN    apt-get -y update \
@@ -26,9 +28,11 @@ RUN adduser --disabled-password --gecos="openipam_user" openipam
 
 RUN install -d -m 2775 -o openipam -g openipam /usr/local/django-openipam
 
+RUN echo "$git_branch" | tee /git_branch
+
 USER openipam
 
-RUN git clone --depth=1 https://github.com/openipam/django-openipam.git /usr/local/django-openipam #1
+RUN git clone --branch $git_branch --depth=1 https://github.com/openipam/django-openipam.git /usr/local/django-openipam
 
 USER root
 
