@@ -104,7 +104,11 @@ DATABASES = {
     }
 }
 
-#EMAIL_HOST = 'mail.usu.edu'
+$(
+if [ -n "$EMAIL_HOST" ]; then
+    echo "EMAIL_HOST = '$EMAIL_HOST'"
+fi
+)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 INTERNAL_IPS = ('127.0.0.1',)
@@ -208,6 +212,7 @@ unset DUO_AKEY
 unset DUO_HOST
 unset DUO_IKEY
 unset DUO_SKEY
+unset EMAIL_HOST
 unset GUEST_PREFIX
 unset GUEST_SUFFIX
 unset LOCAL_SECRET_KEY
