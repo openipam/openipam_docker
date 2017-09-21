@@ -109,7 +109,8 @@ if [ -n "$EMAIL_HOST" ]; then
     echo "EMAIL_HOST = '$EMAIL_HOST'"
 fi
 )
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+EMAIL_BACKEND = 'openipam.core.backends.LoggingEmailBackend'
 
 INTERNAL_IPS = ('127.0.0.1',)
 
