@@ -32,7 +32,7 @@ RUN echo "$git_branch" | tee /git_branch
 
 USER openipam
 
-RUN git clone --branch $git_branch --depth=1 https://github.com/openipam/django-openipam.git /usr/local/django-openipam
+RUN git clone --branch $git_branch --depth=1 https://github.com/openipam/django-openipam.git /usr/local/django-openipam  # 2
 
 USER root
 
