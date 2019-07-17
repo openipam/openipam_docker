@@ -1,13 +1,13 @@
-FROM debian:jessie
+FROM debian:stretch
 
 MAINTAINER Eldon Koyle <ekoyle@gmail.com>
 
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get -y update \
-	&& apt-get install -y --no-install-recommends curl ca-certificates \
+	&& apt-get install -y --no-install-recommends curl ca-certificates gnupg \
 	&& curl https://repo.powerdns.com/FD380FBB-pub.asc | apt-key add - \
-	&& /bin/echo -e "\n# powerdns official packages\ndeb http://repo.powerdns.com/debian jessie-auth-40 main\n" >> /etc/apt/sources.list \
+	&& /bin/echo -e "\n# powerdns official packages\ndeb http://repo.powerdns.com/debian stretch-auth-41 main\n" >> /etc/apt/sources.list \
 	&& apt-get -y update \
 	&& apt-get install -q -y pdns-server pdns-backend-pgsql \
 	&& apt-get clean \

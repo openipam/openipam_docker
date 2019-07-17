@@ -3,5 +3,5 @@
 PYTHONPATH=/usr/local/openipam/openIPAM/pydhcplib:/usr/local/openipam/openIPAM
 export PYTHONPATH
 
-exec /usr/local/openipam/openIPAM/openipam_dhcpd
+exec python3 /usr/local/openipam/openIPAM/openipam_dhcpd
 

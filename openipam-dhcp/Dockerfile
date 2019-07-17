@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM debian:buster
 
 MAINTAINER Eldon Koyle <ekoyle@gmail.com>
 
@@ -7,9 +7,9 @@ ENV DEBIAN_FRONTEND noninteractive
 #RUN /bin/echo -e "\n# backports for pdns-server\ndeb http://http.debian.net/debian jessie-backports main\n" >> /etc/apt/sources.list
 
 RUN apt-get -y update && \
-    apt-get install -q -y python-sqlalchemy python-ldap python-psycopg2 python-ipy git python-setuptools
+    apt-get install -q -y python3 python3-sqlalchemy python3-ldap python3-psycopg2 python3-ipy git python3-pip
 
-RUN easy_install raven
+RUN pip3 install raven
 
 COPY ./start_dhcp.sh /usr/local/bin/start_dhcp.sh
 
@@ -22,7 +22,7 @@ RUN install -d -m 2775 -o openipam -g openipam /usr/local/openipam
 USER openipam
 
 #RUN git clone https://github.com/openipam/openipam.git /usr/local/openipam
-RUN git clone https://github.com/ekoyle/openipam.git /usr/local/openipam
+RUN git clone -b python3 --depth 1 https://github.com/ekoyle/openipam.git /usr/local/openipam
 
 COPY ./openipam_config /usr/local/openipam/openIPAM/openipam_config
 
