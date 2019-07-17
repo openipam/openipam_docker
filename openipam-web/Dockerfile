@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM debian:buster
 
 MAINTAINER Eldon Koyle <ekoyle@gmail.com>
 
@@ -9,18 +9,18 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN    apt-get -y update \
     && apt-get install -q -y \
         uwsgi \
-        uwsgi-plugin-python \
-        python-ldap \
-        python-psycopg2 \
+        uwsgi-plugin-python3 \
+        python3-ldap \
+        python3-psycopg2 \
         git \
-        python-setuptools \
-        python-pip \
-        python-mysqldb \
+        python3-setuptools \
+        python3-pip \
+        python3-mysqldb \
         build-essential \
-        python-dev \
-        python-coverage \
+        python3-dev \
+        python3-coverage \
         zlib1g-dev \
-        python-appdirs \
+        python3-appdirs \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -32,13 +32,13 @@ RUN echo "$git_branch" | tee /git_branch
 
 USER openipam
 
-RUN git clone --branch $git_branch --depth=1 https://github.com/openipam/django-openipam.git /usr/local/django-openipam  # 2
+RUN git clone --branch $git_branch --depth=1 https://github.com/openipam/django-openipam.git /usr/local/django-openipam
 
 USER root
 
 # We want the Debian psycopg and python-ldap, for simplicity
 RUN cat /usr/local/django-openipam/env/requirements.txt | sed '/^## EXCLUDE FROM DOCKER ##$/,$d' > /requirements_docker.txt \
-    && pip install -r /requirements_docker.txt
+    && pip3 install -r /requirements_docker.txt
 
 COPY uwsgi.ini /etc/uwsgi/uwsgi.ini
 RUN chmod a+r /etc/uwsgi/uwsgi.ini
@@ -53,7 +53,7 @@ USER openipam
 # FIXME: why is this directory referenced in STATICFILES_DIRS (openipam/conf/settings.py) if it doesn't exist?
 RUN [ -d /usr/local/django-openipam/components/static_components ] || mkdir -p /usr/local/django-openipam/components/static_components
 
-RUN cd /usr/local/django-openipam && ./manage.py collectstatic --no-input
+RUN cd /usr/local/django-openipam && python3 ./manage.py collectstatic --no-input
 
 USER root
 
