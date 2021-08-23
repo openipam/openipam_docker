@@ -30,14 +30,9 @@ RUN install -d -m 2775 -o openipam -g openipam /usr/local/django-openipam
 
 RUN echo "$git_branch" | tee /git_branch
 
-USER openipam
-
-RUN git clone --branch $git_branch --depth=1 https://github.com/openipam/django-openipam.git /usr/local/django-openipam
-
-USER root
-
 # We want the Debian psycopg and python-ldap, for simplicity
-RUN cat /usr/local/django-openipam/env/requirements.txt | sed '/^## EXCLUDE FROM DOCKER ##$/,$d' > /requirements_docker.txt \
+COPY --chown=openipam:openipam django-openipam/env/requirements.txt /requirements_orig.txt
+RUN cat /requirements_orig.txt | sed '/^## EXCLUDE FROM DOCKER ##$/,$d' > /requirements_docker.txt \
     && pip3 install -r /requirements_docker.txt
 
 COPY uwsgi.ini /etc/uwsgi/uwsgi.ini
@@ -49,6 +44,9 @@ COPY start_uwsgi.sh /usr/local/bin/
 RUN chmod a+rx /usr/local/bin/start_uwsgi.sh
 
 USER openipam
+
+#RUN git clone --branch $git_branch --depth=1 https://github.com/openipam/django-openipam.git /usr/local/django-openipam
+COPY --chown=openipam:openipam django-openipam /usr/local/django-openipam
 
 # FIXME: why is this directory referenced in STATICFILES_DIRS (openipam/conf/settings.py) if it doesn't exist?
 RUN [ -d /usr/local/django-openipam/components/static_components ] || mkdir -p /usr/local/django-openipam/components/static_components
