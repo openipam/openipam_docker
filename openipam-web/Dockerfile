@@ -1,6 +1,6 @@
-FROM debian:buster
+FROM debian:bullseye
 
-MAINTAINER Eldon Koyle <ekoyle@gmail.com>
+MAINTAINER Jay McEntire <jay.mcentire@gmail.com>
 
 ARG git_branch=master
 

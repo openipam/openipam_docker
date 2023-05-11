@@ -222,4 +222,4 @@ unset STARTUP_DEBUG
 unset UWSGI_ADD_ARGS
 unset WEATHERMAP_DATA_JSON
 
-exec /usr/bin/uwsgi_python3 --ini=/etc/uwsgi/uwsgi.ini --master $uwsgi_add_args
+exec /usr/bin/uwsgi_python39 --ini=/etc/uwsgi/uwsgi.ini --master $uwsgi_add_args
