@@ -126,30 +126,13 @@ LOCAL_MIDDLEWARE_CLASSES = [
     #'djangopad.middleware.sql_log.SQLLogMiddleware',
 ]
 
-LOCAL_INSTALLED_APPS = (
-$(
-if [ -n $RAVEN_DSN ]; then
-    echo "    'raven.contrib.django.raven_compat',"
-fi
-)
-)
-
-$(
-if [ -n "$RAVEN_DSN" ]; then
-    echo -e "RAVEN_CONFIG = {\n    'dsn': '$RAVEN_DSN'\n}"
-fi
-)
+SENTRY_DSN = '$SENTRY_DSN'
+SENTRY_ENVIRONMENT = '$SENTRY_ENVIRONMENT'
 
 OPENIPAM = {
 $(
 if [ -n "$GUEST_PREFIX" -a -n "$GUEST_SUFFIX" ]; then
     echo -e "    'GUEST_HOSTNAME_FORMAT': ['$GUEST_PREFIX', '$GUEST_SUFFIX'],\n"
-fi
-
-if [ -n "$CAS_LOGIN_URL" ]; then
-    echo "    'CAS_LOGIN': '$CAS_LOGIN_URL',"
-else
-    echo "    'CAS_LOGIN': False,"
 fi
 
 if [ -n "$DUO_HOST" ]; then
@@ -164,13 +147,13 @@ cat << __DUO_EOF__
 __DUO_EOF__
 fi
 
-if [ -n "$WEATHERMAP_DATA_JSON" ]; then
-cat << __WEATHERMAP_EOF__
-    'WEATHERMAP_DATA': json.loads("""$WEATHERMAP_DATA_JSON"""),
-__WEATHERMAP_EOF__
-fi
+if [ -n "$SAML2_METADATA_URL"]; then
+cat << __SAML2_EOF__
+    'SAML2_LOGIN': True,
+    'SAML2_LOGIN_TEXT': '$SAML2_LOGIN_TEXT',
+    'SAML2_LOGIN_IMAGE': ''
+__SAML2_EOF__
 )
-}
 
 $(
 if [ -n "$LOCAL_SETTINGS_APPEND" ] ; then
@@ -202,7 +185,6 @@ unset AD_LDAP_TLS_REQCERT
 unset AD_LDAP_USER_BASE
 unset AD_LDAP_USER_FILTER
 unset AUTHENTICATION_TYPE
-unset CAS_LOGIN_URL
 unset DB_DATABASE
 unset DB_HOST
 unset DB_PASSWORD
@@ -217,9 +199,9 @@ unset EMAIL_HOST
 unset GUEST_PREFIX
 unset GUEST_SUFFIX
 unset LOCAL_SECRET_KEY
-unset RAVEN_DSN
+unset SENTRY_DSN
+unset SENTRY_ENVIRONMENT
 unset STARTUP_DEBUG
 unset UWSGI_ADD_ARGS
-unset WEATHERMAP_DATA_JSON
 
 exec /usr/bin/uwsgi_python39 --ini=/etc/uwsgi/uwsgi.ini --master $uwsgi_add_args

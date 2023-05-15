@@ -21,6 +21,7 @@ RUN    apt-get -y update \
         python3-coverage \
         zlib1g-dev \
         python3-appdirs \
+	xmlsec1 \ 
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
