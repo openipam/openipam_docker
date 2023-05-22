@@ -129,6 +129,22 @@ LOCAL_MIDDLEWARE_CLASSES = [
 SENTRY_DSN = '$SENTRY_DSN'
 SENTRY_ENVIRONMENT = '$SENTRY_ENVIRONMENT'
 
+SAML2_AUTH = {
+    "METADATA_AUTO_CONF_URL": "$SAML2_METADATA_URL",
+    "ENTITY_ID": "https://$HOSTNAME/acs/",
+    "NAMEID_FORMAT": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+    "CREATE_USER": True,
+    "BINDING": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
+    "ATTRIBUTES_MAP": {
+        "username": "name",
+        "email": "emailAddress",
+        "first_name": "givenName",
+        "last_name": "surname",
+    },
+    "USE_LDAP_GROUPS": True,
+    "ASSERTION_URL": "https://$HOSTNAME",
+}
+
 OPENIPAM = {
 $(
 if [ -n "$GUEST_PREFIX" -a -n "$GUEST_SUFFIX" ]; then
@@ -205,8 +221,10 @@ unset EMAIL_HOST
 unset GUEST_PREFIX
 unset GUEST_SUFFIX
 unset LOCAL_SECRET_KEY
+unset HOSTNAME
 unset SENTRY_DSN
 unset SENTRY_ENVIRONMENT
+unset SAML2_METADATA_URL
 unset SAML2_LOGIN_TEXT
 unset SAML2_LOGIN_IMAGE
 unset INTERNAL_LOGIN_SUBNET_RESTRICT
